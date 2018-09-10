@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Plantilla que muestra todos los productos coincidentes con el producto ingresado por el usuario.
+     La clase bootstras d-none hace invisible el listado de productos-->
+	
+	<table th:fragment="itemsFactura" class="d-none">
+		<tbody id="plantillaItemsFactura">
+			<tr id="row_{ID}">
+				<td class="d-none"><input type="hidden" value="{ID}" name="item_id[]" /></td>
+				<td>{NOMBRE}</td>
+				<td>{PRECIO}</td>
+				<td><input type="number" value="1" name="cantidad[]" id="cantidad_{ID}" 
+					class="form-control col-sm-4" onchange="itemsHelper.calcularImporte({ID}, {PRECIO}, this.value);" /></td>
+				<td><span id="total_importe_{ID}">0</span></td>
+				<td><a href="#" class="btn btn-danger btn-xs" onclick="itemsHelper.eliminarLineaFactura({ID})">x</a></td>
+				<!-- para calcular el total de la factura, recorremos todos los span de total_importe_{ID} y empezamos
+					a sumar el importe de cada linea. total_importe depende del ID. Debemos utilizar un expresion
+					regular que contenga todos los ID del total_importe. Esto se realiza en el javascript autoComplete-productos -->
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

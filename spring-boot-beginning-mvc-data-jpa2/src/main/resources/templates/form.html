@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!-- Adicionamos en namespace de thymeleaf -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head">
+</head>
+<body>
+	
+	<header th:replace="layout/layout :: header"></header>
+	
+	<div class="container py-4">
+	<div class="card bg-dark text-white">
+		<div class="card-header" th:text="${titulo}"></div>
+		<div class="card-body">
+		<!-- Creamos una lista que contenga todos los errores -->
+		<div th:object="${cliente}" th:remove="tag">
+			<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+				<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
+			</ul>
+		</div>
+		
+		<!-- Thymeliaf utiliza dos propiedades cuando se trabajan con formularios
+	     action: contiene la url hacia la ruta que procesa al formulario que son request de tipo POST. El simbolo @
+	     se utiliza para indicar url  
+	     object: mapea el objeto (entidad) con los campos del formulario
+	     enctype: nos permite subir datos al servidor desde un formulario-->
+		<form th:action="@{/form}" th:object="${cliente}" method="post" enctype="multipart/form-data">
+			
+			<div class="form-group row">
+				<label for="nombre" class="col-sm-2 col-form=label" >Nombre</label>
+				<div class="col-sm-6">
+					<input type="text" th:field="*{nombre}" class="form-control" th:errorclass="'form-control alert-danger'" />
+					<!-- Validamos si el campo nombre contiene errores -->
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" ></small>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="apellido" class="col-sm-2 col-form=label" >Apellido</label>
+				<div class="col-sm-6">
+					<input type="text" th:field="*{apellido}" class="form-control" th:errorclass="'form-control alert-danger'" />
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}" ></small>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="email" class="col-sm-2 col-form=label">Email</label>
+				<div class="col-sm-6">
+					<input type="text" th:field="*{email}" class="form-control" th:errorclass="'form-control alert-danger'" />
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" ></small>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Fecha</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" th:field="*{createdAt}" th:errorclass="'form-control alert-danger'" />
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('createdAt')}" th:errors="*{createdAt}" ></small>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Foto</label>
+				<div class="col-sm-6">
+					<input type="file" name="file" class="form-control" />
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<div class="col-sm-6">
+					<input type="submit" value="Registrar" class="btn btn-seconday" />
+				</div>
+			</div>
+			
+			<!-- Mapeamos el campo con el objeto cliente.id con el simbolo * . Este campo no se mostrara en el form
+			<input type="hidden" th:field="*{id}" />	
+			-->		
+		</form>
+		</div>
+	</div>
+	</div>
+	
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>
