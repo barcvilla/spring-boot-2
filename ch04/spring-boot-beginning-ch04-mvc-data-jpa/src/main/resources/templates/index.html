@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+	<header th:replace="layout/layout :: header"></header>
+	
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text="'Beginning Spring Boot 2.0'"></div>
+			<div class="card-body">
+				<h4 class="card-title">
+					<a th:href="@{/listar}" class="btn btn-primary btn-xs">Ver lista de Clientes</a>
+				</h4>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

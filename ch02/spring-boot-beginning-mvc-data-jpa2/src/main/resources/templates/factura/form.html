@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+	<header th:replace="layout/layout :: header"></header>
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+				<h4 class="card-title">
+					<a class="btn btn-light btn-xs" th:href="@{'/ver/' + ${factura.cliente.id}}" th:text="'&laquo;volver'"></a>
+				</h4>
+				
+				<form th:action="@{/factura/form}" th:object="${factura}" method="post">
+					
+					<div class="form-group row">
+						<!-- Campo deshabilitado que sirve para mostrar el nombre del cliente -->
+						<label class="col-sm-2 col-form-label" th:text="'Cliente '"></label>
+						<div class="col-sm-6">
+							<input class="form-control" th:value="${factura.cliente.nombre} + ' ' + ${factura.cliente.apellido}" disabled='disabled' />
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label" th:text="'Descripcion: '"></label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{descripcion}" class="form-control"
+							th:errorclass="'form-control is-invalid'" />
+							<!-- adicionamos el mensaje de erro si la descripcion es empty -->
+							<div class="invalid-feedback" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+							<label class="col-sm-2 col-form-label" th:text="'Observacion'"></label>
+							<div class="col-sm-6">
+								<textarea th:field="*{observacion}" class="form-control"></textarea>
+							</div>
+					</div>
+					
+					<!-- Creacion del campo AutoComplete para busquedas automaticas de productos usando JQuery
+					     y realizando una peticion asincrona AJAX al servidor conforme el usuario ingresa el 
+					     nombre de un producto. Todas estas peticiones con controladas por un metodo Handler el cual
+					     toma el input del usuario y lo busca en la bd-->
+					<div class="form-group row">
+						<label for="buscar_producto" class="col-sm-2 col-form-label" th:text="'Buscar producto: '"></label>
+						<div class="col-sm-6">
+							<input type="text" name="buscar_producto" id="buscar_producto" class="form-control" />
+						</div>
+					</div>
+					
+					<!-- Llamamos a nuestra plantilla de items coincidentes con el input del usuario -->
+					<table th:replace="factura/plantilla-items :: itemsFactura"></table>
+					
+					<table id="cargarItemProductos" class="table table-sm table-striped table-hover">
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Precio</th>
+								<th>Cantidad</th>
+								<th>Total</th>
+								<th>Eliminar</th>
+							</tr>
+						</thead>
+						<!-- Detalle de la factura -->
+						<tbody>
+						</tbody>
+					</table>
+					
+					<!-- Gran Total -->
+					<h5>Total: <span class="badge badge-secondary" id="gran_total">0</span></h5>
+					
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<input type="submit" th:value="${titulo}" class="btn btn-scondary" />
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<footer th:replace="layout/layout :: footer"></footer>
+	<script th:replace="factura/js/autocomplete-productos :: javascript"></script>
+</body>
+</html>
